@@ -335,7 +335,7 @@ st.html("""
 
 with st.sidebar:
     st.markdown("## :material/hub: GraphRAG lab")
-    st.caption("Round 1 investigation console")
+    st.caption("Investigation console")
     st.badge("Local demo corpus", icon=":material/database:", color="green")
     st.markdown("### System status")
     st.success("Pipelines ready", icon=":material/check_circle:")
@@ -357,7 +357,7 @@ with hero_left:
     st.badge("GraphRAG", color="blue")
     st.badge("Agentic GraphRAG", color="green")
 with hero_right:
-    st.metric("Round 1 mode", "Live demo", border=True)
+    st.metric("Mode", "Live demo", border=True)
 
 scene_data = {"question": "ready", "steps": 0}
 if st.session_state.get("results"):
