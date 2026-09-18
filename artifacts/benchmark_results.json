@@ -1,0 +1,330 @@
+{
+  "status": "local-demo",
+  "note": "Replace EVALUATION_SET with the official 100 public questions before submission.",
+  "results": [
+    {
+      "pipeline": "RAG",
+      "question": "Who launched Atlas?",
+      "answer": "Atlas was launched by Maya Chen and Ravi Shah.",
+      "evidence": [
+        "TigerGraph launched Atlas in 2022. The launch team included Maya Chen and Ravi Shah.",
+        "Atlas uses a property graph for connected entities and a vector index for semantic retrieval.",
+        "Maya Chen led the Atlas launch and later joined the Trustworthy AI group in 2024."
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "agent": "document_retriever",
+          "method": "similarity_search",
+          "hits": 3
+        }
+      ],
+      "methods": [
+        "similarity_search"
+      ],
+      "tokens": 56,
+      "steps": 1,
+      "expected": "Atlas was launched by Maya Chen and Ravi Shah.",
+      "correct": true,
+      "grounded": true
+    },
+    {
+      "pipeline": "GraphRAG",
+      "question": "Who launched Atlas?",
+      "answer": "Atlas was launched by Maya Chen and Ravi Shah.",
+      "evidence": [
+        "Atlas launched_by Maya Chen",
+        "Atlas launched_by Ravi Shah",
+        "TigerGraph launched Atlas in 2022. The launch team included Maya Chen and Ravi Shah.",
+        "Atlas uses a property graph for connected entities and a vector index for semantic retrieval."
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "agent": "graph_retriever",
+          "method": "graph_traversal",
+          "hits": 2
+        },
+        {
+          "step": 2,
+          "agent": "document_retriever",
+          "method": "similarity_search",
+          "hits": 2
+        }
+      ],
+      "methods": [
+        "graph_traversal",
+        "similarity_search"
+      ],
+      "tokens": 49,
+      "steps": 2,
+      "expected": "Atlas was launched by Maya Chen and Ravi Shah.",
+      "correct": true,
+      "grounded": true
+    },
+    {
+      "pipeline": "Agentic GraphRAG",
+      "question": "Who launched Atlas?",
+      "answer": "Atlas was launched by Maya Chen and Ravi Shah.",
+      "evidence": [
+        "TigerGraph launched Atlas in 2022. The launch team included Maya Chen and Ravi Shah.",
+        "Atlas uses a property graph for connected entities and a vector index for semantic retrieval.",
+        "Maya Chen led the Atlas launch and later joined the Trustworthy AI group in 2024.",
+        "Atlas launched_by Maya Chen",
+        "Atlas launched_by Ravi Shah"
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "agent": "orchestrator",
+          "method": "similarity_search",
+          "reason": "question complexity"
+        },
+        {
+          "step": 2,
+          "agent": "orchestrator",
+          "method": "graph_traversal",
+          "reason": "verify and fill evidence gaps"
+        },
+        {
+          "step": 3,
+          "agent": "evidence_evaluator",
+          "method": "evidence_check",
+          "reason": "stop when evidence is sufficient"
+        }
+      ],
+      "methods": [
+        "similarity_search",
+        "graph_traversal"
+      ],
+      "tokens": 64,
+      "steps": 3,
+      "expected": "Atlas was launched by Maya Chen and Ravi Shah.",
+      "correct": true,
+      "grounded": true
+    },
+    {
+      "pipeline": "RAG",
+      "question": "Which group did Maya Chen later join?",
+      "answer": "Maya Chen later joined the Trustworthy AI group in 2024.",
+      "evidence": [
+        "Maya Chen led the Atlas launch and later joined the Trustworthy AI group in 2024.",
+        "TigerGraph launched Atlas in 2022. The launch team included Maya Chen and Ravi Shah.",
+        "The Trustworthy AI group works with Ravi Shah on evidence quality and evaluation."
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "agent": "document_retriever",
+          "method": "similarity_search",
+          "hits": 3
+        }
+      ],
+      "methods": [
+        "similarity_search"
+      ],
+      "tokens": 59,
+      "steps": 1,
+      "expected": "Maya Chen later joined the Trustworthy AI group in 2024.",
+      "correct": true,
+      "grounded": true
+    },
+    {
+      "pipeline": "GraphRAG",
+      "question": "Which group did Maya Chen later join?",
+      "answer": "Maya Chen later joined the Trustworthy AI group in 2024.",
+      "evidence": [
+        "Atlas launched_by Maya Chen",
+        "Maya Chen joined Trustworthy AI group",
+        "Ravi Shah works_with Trustworthy AI group",
+        "Maya Chen led the Atlas launch and later joined the Trustworthy AI group in 2024.",
+        "TigerGraph launched Atlas in 2022. The launch team included Maya Chen and Ravi Shah."
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "agent": "graph_retriever",
+          "method": "graph_traversal",
+          "hits": 3
+        },
+        {
+          "step": 2,
+          "agent": "document_retriever",
+          "method": "similarity_search",
+          "hits": 2
+        }
+      ],
+      "methods": [
+        "graph_traversal",
+        "similarity_search"
+      ],
+      "tokens": 62,
+      "steps": 2,
+      "expected": "Maya Chen later joined the Trustworthy AI group in 2024.",
+      "correct": true,
+      "grounded": true
+    },
+    {
+      "pipeline": "Agentic GraphRAG",
+      "question": "Which group did Maya Chen later join?",
+      "answer": "Maya Chen later joined the Trustworthy AI group in 2024.",
+      "evidence": [
+        "Atlas launched_by Maya Chen",
+        "Maya Chen joined Trustworthy AI group",
+        "Ravi Shah works_with Trustworthy AI group",
+        "Maya Chen led the Atlas launch and later joined the Trustworthy AI group in 2024.",
+        "TigerGraph launched Atlas in 2022. The launch team included Maya Chen and Ravi Shah."
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "agent": "orchestrator",
+          "method": "graph_traversal",
+          "reason": "question complexity"
+        },
+        {
+          "step": 2,
+          "agent": "orchestrator",
+          "method": "similarity_search",
+          "reason": "verify and fill evidence gaps"
+        },
+        {
+          "step": 3,
+          "agent": "evidence_evaluator",
+          "method": "evidence_check",
+          "reason": "stop when evidence is sufficient"
+        }
+      ],
+      "methods": [
+        "graph_traversal",
+        "similarity_search"
+      ],
+      "tokens": 62,
+      "steps": 3,
+      "expected": "Maya Chen later joined the Trustworthy AI group in 2024.",
+      "correct": true,
+      "grounded": true
+    },
+    {
+      "pipeline": "RAG",
+      "question": "Why does GraphRAG help with multi-hop questions?",
+      "answer": "GraphRAG helps because it connects entities and relationships for multi-hop questions.",
+      "evidence": [
+        "GraphRAG improves multi-hop questions by connecting entities and relationships before answer generation.",
+        "The Trustworthy AI group works with Ravi Shah on evidence quality and evaluation."
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "agent": "document_retriever",
+          "method": "similarity_search",
+          "hits": 2
+        }
+      ],
+      "methods": [
+        "similarity_search"
+      ],
+      "tokens": 43,
+      "steps": 1,
+      "expected": "GraphRAG helps because it connects entities and relationships for multi-hop questions.",
+      "correct": true,
+      "grounded": true
+    },
+    {
+      "pipeline": "GraphRAG",
+      "question": "Why does GraphRAG help with multi-hop questions?",
+      "answer": "GraphRAG helps because it connects entities and relationships for multi-hop questions.",
+      "evidence": [
+        "GraphRAG improves multi-hop questions by connecting entities and relationships before answer generation.",
+        "The Trustworthy AI group works with Ravi Shah on evidence quality and evaluation."
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "agent": "graph_retriever",
+          "method": "graph_traversal",
+          "hits": 0
+        },
+        {
+          "step": 2,
+          "agent": "document_retriever",
+          "method": "similarity_search",
+          "hits": 2
+        }
+      ],
+      "methods": [
+        "graph_traversal",
+        "similarity_search"
+      ],
+      "tokens": 43,
+      "steps": 2,
+      "expected": "GraphRAG helps because it connects entities and relationships for multi-hop questions.",
+      "correct": true,
+      "grounded": true
+    },
+    {
+      "pipeline": "Agentic GraphRAG",
+      "question": "Why does GraphRAG help with multi-hop questions?",
+      "answer": "GraphRAG helps because it connects entities and relationships for multi-hop questions.",
+      "evidence": [
+        "GraphRAG improves multi-hop questions by connecting entities and relationships before answer generation.",
+        "The Trustworthy AI group works with Ravi Shah on evidence quality and evaluation."
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "agent": "orchestrator",
+          "method": "graph_traversal",
+          "reason": "question complexity"
+        },
+        {
+          "step": 2,
+          "agent": "orchestrator",
+          "method": "similarity_search",
+          "reason": "verify and fill evidence gaps"
+        },
+        {
+          "step": 3,
+          "agent": "evidence_evaluator",
+          "method": "evidence_check",
+          "reason": "stop when evidence is sufficient"
+        }
+      ],
+      "methods": [
+        "graph_traversal",
+        "similarity_search"
+      ],
+      "tokens": 43,
+      "steps": 3,
+      "expected": "GraphRAG helps because it connects entities and relationships for multi-hop questions.",
+      "correct": true,
+      "grounded": true
+    }
+  ],
+  "summary": [
+    {
+      "pipeline": "RAG",
+      "questions": 3,
+      "accuracy": 1.0,
+      "grounding": 1.0,
+      "avg_tokens": 52.7,
+      "avg_steps": 1.0
+    },
+    {
+      "pipeline": "GraphRAG",
+      "questions": 3,
+      "accuracy": 1.0,
+      "grounding": 1.0,
+      "avg_tokens": 51.3,
+      "avg_steps": 2.0
+    },
+    {
+      "pipeline": "Agentic GraphRAG",
+      "questions": 3,
+      "accuracy": 1.0,
+      "grounding": 1.0,
+      "avg_tokens": 56.3,
+      "avg_steps": 3.0
+    }
+  ]
+}
