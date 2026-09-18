@@ -6,6 +6,7 @@ from src.core import EVALUATION_SET, PIPELINES, benchmark, evaluate, run_pipelin
 GRAPH_HTML = """
 <div class="scene-shell">
     <div class="scene-label"><span class="pulse"></span> 3D investigation architecture</div>
+    <div class="scene-hint">drag to orbit · scroll to zoom</div>
     <div class="scene-canvas"></div>
     <div class="scene-detail">Click a node to inspect the flow.</div>
     <button class="reset-view" type="button">Reset view</button>
@@ -19,10 +20,19 @@ GRAPH_CSS = """
     overflow: hidden;
     position: relative;
     border-radius: 18px;
-    background: radial-gradient(circle at 50% 45%, #164e63 0%, #102f42 42%, #081a29 100%);
+    background: radial-gradient(circle at 50% 40%, #1e6576 0%, #123b52 36%, #091b31 72%, #050e1d 100%);
     box-shadow: inset 0 0 0 1px rgba(160, 240, 221, .2), 0 20px 40px rgba(8, 26, 41, .16);
 }
 .scene-canvas { height: 100%; width: 100%; }
+.scene-hint {
+    color: rgba(214, 255, 242, .68);
+    font: 500 11px/1.2 sans-serif;
+    letter-spacing: .04em;
+    position: absolute;
+    right: 18px;
+    top: 18px;
+    z-index: 2;
+}
 .scene-detail {
     background: rgba(4, 18, 30, .72);
     border: 1px solid rgba(160, 240, 221, .18);
@@ -164,12 +174,33 @@ export default async function(component) {
     const raycaster = new THREE.Raycaster()
     const pointer = new THREE.Vector2()
     let selected = 1
+    let dragging = false
+    let dragMoved = false
+    let lastPointer = { x: 0, y: 0 }
     let cameraGoalZ = 13.5
     let cameraGoalX = 0
     let cameraGoalY = 0.3
     let focus = new THREE.Vector3(0, 0, 0)
     renderer.domElement.style.cursor = 'pointer'
     renderer.domElement.addEventListener('pointerdown', (event) => {
+        dragging = true
+        dragMoved = false
+        lastPointer = { x: event.clientX, y: event.clientY }
+        renderer.domElement.setPointerCapture(event.pointerId)
+    })
+    renderer.domElement.addEventListener('pointermove', (event) => {
+        if (!dragging) return
+        const dx = event.clientX - lastPointer.x
+        const dy = event.clientY - lastPointer.y
+        if (Math.abs(dx) + Math.abs(dy) > 2) dragMoved = true
+        group.rotation.y += dx * 0.008
+        group.rotation.x = Math.max(-0.55, Math.min(0.55, group.rotation.x + dy * 0.005))
+        lastPointer = { x: event.clientX, y: event.clientY }
+    })
+    renderer.domElement.addEventListener('pointerup', (event) => {
+        dragging = false
+        renderer.domElement.releasePointerCapture(event.pointerId)
+        if (dragMoved) return
         const bounds = renderer.domElement.getBoundingClientRect()
         pointer.x = ((event.clientX - bounds.left) / bounds.width) * 2 - 1
         pointer.y = -((event.clientY - bounds.top) / bounds.height) * 2 + 1
@@ -184,8 +215,15 @@ export default async function(component) {
             detail.textContent = `${points[selected].name}: ${points[selected].description}`
         }
     })
+    renderer.domElement.addEventListener('pointerleave', () => { dragging = false })
+    renderer.domElement.addEventListener('wheel', (event) => {
+        event.preventDefault()
+        cameraGoalZ = Math.max(7, Math.min(16, cameraGoalZ + event.deltaY * 0.012))
+    }, { passive: false })
     reset.addEventListener('click', () => {
         selected = 1
+        group.rotation.x = 0
+        group.rotation.y = 0
         cameraGoalZ = 13.5
         cameraGoalX = 0
         cameraGoalY = 0.3
@@ -199,8 +237,7 @@ export default async function(component) {
         camera.position.x += (cameraGoalX - camera.position.x) * 0.08
         camera.position.y += (cameraGoalY - camera.position.y) * 0.08
         camera.lookAt(focus)
-        group.rotation.y += 0.0018
-        group.rotation.x = Math.sin(Date.now() * 0.00035) * 0.035
+        if (!dragging) group.rotation.y += 0.001
         meshes.forEach((mesh, index) => {
             const pulse = 1 + Math.sin(Date.now() * 0.002 + index) * 0.055
             mesh.scale.setScalar(index === selected ? pulse * 1.28 : pulse)
