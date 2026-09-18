@@ -27,15 +27,40 @@ with st.sidebar:
     st.caption("Replace the demo corpus with the official benchmark dataset before submission.")
 
 
-st.title("Investigate connected evidence", icon=":material/search_insights:")
-st.caption("Compare how much reasoning each retrieval strategy needs to answer the same question.")
+hero_left, hero_right = st.columns([3, 1], vertical_alignment="center")
+with hero_left:
+    st.title("Investigate connected evidence", icon=":material/search_insights:")
+    st.caption("A compact lab for seeing when graph structure and agentic reasoning actually help.")
+    st.badge("RAG", color="gray")
+    st.badge("GraphRAG", color="blue")
+    st.badge("Agentic GraphRAG", color="green")
+with hero_right:
+    st.metric("Round 1 mode", "Live demo", border=True)
+
+with st.container(border=True):
+    st.markdown("**How the investigation works**")
+    flow_columns = st.columns(3)
+    flow_steps = [
+        (":material/search:", "Retrieve", "Find relevant documents or graph relationships."),
+        (":material/account_tree:", "Connect", "Join entities across multiple evidence sources."),
+        (":material/fact_check:", "Evaluate", "Check evidence quality and stop when it is enough."),
+    ]
+    for column, (icon, label, description) in zip(flow_columns, flow_steps):
+        with column:
+            st.markdown(f"### {icon} {label}")
+            st.caption(description)
 
 with st.container(border=True):
     st.markdown("**Ask the graph**")
+    scenario = st.selectbox(
+        "Start with a scenario",
+        [item["question"] for item in EVALUATION_SET],
+        label_visibility="collapsed",
+    )
     with st.form("investigation_form"):
         question = st.text_input(
             "Investigation question",
-            "Who launched Atlas and which group did Maya Chen later join?",
+            scenario,
             label_visibility="collapsed",
         )
         submitted = st.form_submit_button("Run investigation", type="primary", icon=":material/play_arrow:")
