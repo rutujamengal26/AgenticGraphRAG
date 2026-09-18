@@ -118,14 +118,13 @@ export default async function(component) {
         canvas.width = 640
         canvas.height = 112
         const context = canvas.getContext('2d')
-        context.fillStyle = 'rgba(5, 20, 31, .9)'
-        context.beginPath()
-        context.roundRect(4, 4, 632, 104, 18)
-        context.fill()
-        context.fillStyle = color
-        context.fillRect(4, 4, 8, 104)
+        context.textAlign = 'center'
         context.font = '700 38px sans-serif'
-        context.fillText(text, 28, 68)
+        context.lineWidth = 10
+        context.strokeStyle = 'rgba(10, 16, 30, .9)'
+        context.strokeText(text, 320, 68)
+        context.fillStyle = color
+        context.fillText(text, 320, 68)
         const texture = new THREE.CanvasTexture(canvas)
         const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true }))
         sprite.scale.set(2.25, 0.44, 1)
