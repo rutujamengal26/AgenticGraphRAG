@@ -124,11 +124,11 @@ export default async function(component) {
         context.fill()
         context.fillStyle = color
         context.fillRect(4, 4, 8, 104)
-        context.font = '700 30px sans-serif'
+        context.font = '700 38px sans-serif'
         context.fillText(text, 28, 68)
         const texture = new THREE.CanvasTexture(canvas)
         const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true }))
-        sprite.scale.set(1.8, 0.36, 1)
+        sprite.scale.set(2.25, 0.44, 1)
         return sprite
     }
     for (const point of points) {
@@ -307,6 +307,20 @@ if st.session_state.get("results"):
         "steps": next(result for result in st.session_state["results"] if result["pipeline"] == "Agentic GraphRAG")["steps"],
     }
 EVIDENCE_SCENE(data=scene_data, width="stretch", height=390)
+
+with st.container(border=True):
+    st.markdown("**Architecture legend**")
+    with st.container(horizontal=True, wrap=True):
+        for label, color in [
+            ("Question", "blue"),
+            ("Orchestrator", "green"),
+            ("Vector search", "orange"),
+            ("Graph traversal", "orange"),
+            ("Document retrieval", "orange"),
+            ("Evidence check", "violet"),
+            ("Answer", "gray"),
+        ]:
+            st.badge(label, color=color)
 
 with st.container(border=True):
     st.markdown("**How the investigation works**")
