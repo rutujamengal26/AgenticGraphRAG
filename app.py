@@ -103,13 +103,13 @@ export default async function(component) {
     const group = new THREE.Group()
     scene.add(group)
     const points = [
-        { name: 'Question', description: 'The investigation starts with the user question.', x: -4.0, y: 0, z: 0, color: 0x67d4ff, size: 0.25 },
-        { name: 'Orchestrator', description: 'The agent selects the next retrieval action.', x: -1.9, y: 0, z: 0, color: 0x72f2c2, size: 0.34 },
-        { name: 'Vector search', description: 'Find semantically similar document evidence.', x: 0.4, y: 1.35, z: -0.3, color: 0xffc470, size: 0.22 },
-        { name: 'Graph traversal', description: 'Follow entities and relationships across the graph.', x: 0.4, y: 0, z: 0.2, color: 0xffc470, size: 0.22 },
-        { name: 'Document retrieval', description: 'Fetch supporting source passages for citations.', x: 0.4, y: -1.35, z: -0.2, color: 0xffc470, size: 0.22 },
-        { name: 'Evidence check', description: 'Evaluate coverage, grounding, and information gaps.', x: 2.6, y: 0, z: 0, color: 0x8b9cff, size: 0.3 },
-        { name: 'Answer', description: 'Return a grounded answer with trace and citations.', x: 3.9, y: 0, z: 0, color: 0xffffff, size: 0.25 },
+        { name: 'Question', description: 'The investigation starts with the user question.', x: -4.0, y: 0, z: 0, color: 0x63d9ff, label: '#baf0ff', size: 0.25 },
+        { name: 'Orchestrator', description: 'The agent selects the next retrieval action.', x: -1.9, y: 0, z: 0, color: 0xff6b9a, label: '#ffd0df', size: 0.34 },
+        { name: 'Vector search', description: 'Find semantically similar document evidence.', x: 0.4, y: 1.35, z: -0.3, color: 0xffd166, label: '#ffe7a3', size: 0.22 },
+        { name: 'Graph traversal', description: 'Follow entities and relationships across the graph.', x: 0.4, y: 0, z: 0.2, color: 0xff9f68, label: '#ffd0ad', size: 0.22 },
+        { name: 'Document retrieval', description: 'Fetch supporting source passages for citations.', x: 0.4, y: -1.35, z: -0.2, color: 0xf2a7d7, label: '#ffd9f0', size: 0.22 },
+        { name: 'Evidence check', description: 'Evaluate coverage, grounding, and information gaps.', x: 2.6, y: 0, z: 0, color: 0xa78bfa, label: '#ddd2ff', size: 0.3 },
+        { name: 'Answer', description: 'Return a grounded answer with trace and citations.', x: 3.9, y: 0, z: 0, color: 0xf7f3e8, label: '#fff8e8', size: 0.25 },
     ]
     const meshes = []
     const labels = []
@@ -139,7 +139,7 @@ export default async function(component) {
         mesh.position.set(point.x, point.y, point.z)
         group.add(mesh)
         meshes.push(mesh)
-        const label = makeLabel(point.name, '#d6fff2')
+        const label = makeLabel(point.name, point.label)
         label.position.set(point.x, point.y - 0.48, point.z)
         group.add(label)
         labels.push(label)
@@ -151,13 +151,13 @@ export default async function(component) {
             new THREE.Vector3(points[from].x, points[from].y, points[from].z),
             new THREE.Vector3(points[to].x, points[to].y, points[to].z),
         ])
-        group.add(new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: 0x72f2c2, transparent: true, opacity: 0.5 })))
+        group.add(new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: 0xf8c6a8, transparent: true, opacity: 0.55 })))
         const particle = new THREE.Mesh(new THREE.SphereGeometry(0.055, 10, 10), new THREE.MeshBasicMaterial({ color: 0xffffff }))
         group.add(particle)
         flowParticles.push({ particle, from: points[from], to: points[to], offset: Math.random() })
     }
     group.add(new THREE.AmbientLight(0x9eead8, 1.8))
-    const keyLight = new THREE.PointLight(0x67d4ff, 22, 14)
+    const keyLight = new THREE.PointLight(0xffb36b, 24, 14)
     keyLight.position.set(2, 3, 4)
     scene.add(keyLight)
 
