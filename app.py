@@ -8,6 +8,7 @@ GRAPH_HTML = """
     <div class="scene-label"><span class="pulse"></span> 3D investigation architecture</div>
     <div class="scene-canvas"></div>
     <div class="scene-detail">Click a node to inspect the flow.</div>
+    <button class="reset-view" type="button">Reset view</button>
 </div>
 """
 
@@ -35,6 +36,20 @@ GRAPH_CSS = """
     position: absolute;
     z-index: 2;
 }
+.reset-view {
+    background: rgba(114, 242, 194, .14);
+    border: 1px solid rgba(114, 242, 194, .35);
+    border-radius: 8px;
+    bottom: 14px;
+    color: #d6fff2;
+    cursor: pointer;
+    font: 600 12px/1.2 sans-serif;
+    padding: 8px 10px;
+    position: absolute;
+    right: 18px;
+    z-index: 2;
+}
+.reset-view:hover { background: rgba(114, 242, 194, .28); }
 .scene-label {
     color: #d6fff2;
     font: 600 12px/1.2 sans-serif;
@@ -62,6 +77,7 @@ export default async function(component) {
     const { parentElement, data } = component
     const host = parentElement.querySelector('.scene-canvas')
     const detail = parentElement.querySelector('.scene-detail')
+    const reset = parentElement.querySelector('.reset-view')
     if (!host || host.dataset.ready === 'true') return
     host.dataset.ready = 'true'
 
@@ -89,15 +105,20 @@ export default async function(component) {
     const labels = []
     const makeLabel = (text, color) => {
         const canvas = document.createElement('canvas')
-        canvas.width = 512
-        canvas.height = 96
+        canvas.width = 640
+        canvas.height = 112
         const context = canvas.getContext('2d')
-        context.font = '600 26px sans-serif'
+        context.fillStyle = 'rgba(5, 20, 31, .9)'
+        context.beginPath()
+        context.roundRect(4, 4, 632, 104, 18)
+        context.fill()
         context.fillStyle = color
-        context.fillText(text, 12, 48)
+        context.fillRect(4, 4, 8, 104)
+        context.font = '700 30px sans-serif'
+        context.fillText(text, 28, 68)
         const texture = new THREE.CanvasTexture(canvas)
         const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true }))
-        sprite.scale.set(1.55, 0.29, 1)
+        sprite.scale.set(1.8, 0.36, 1)
         return sprite
     }
     for (const point of points) {
@@ -143,6 +164,10 @@ export default async function(component) {
     const raycaster = new THREE.Raycaster()
     const pointer = new THREE.Vector2()
     let selected = 1
+    let cameraGoalZ = 13.5
+    let cameraGoalX = 0
+    let cameraGoalY = 0.3
+    let focus = new THREE.Vector3(0, 0, 0)
     renderer.domElement.style.cursor = 'pointer'
     renderer.domElement.addEventListener('pointerdown', (event) => {
         const bounds = renderer.domElement.getBoundingClientRect()
@@ -152,12 +177,28 @@ export default async function(component) {
         const hit = raycaster.intersectObjects(meshes)[0]
         if (hit) {
             selected = meshes.indexOf(hit.object)
+            cameraGoalZ = 8.8
+            cameraGoalX = points[selected].x * 0.2
+            cameraGoalY = points[selected].y * 0.15
+            focus = new THREE.Vector3(points[selected].x, points[selected].y, points[selected].z)
             detail.textContent = `${points[selected].name}: ${points[selected].description}`
         }
+    })
+    reset.addEventListener('click', () => {
+        selected = 1
+        cameraGoalZ = 13.5
+        cameraGoalX = 0
+        cameraGoalY = 0.3
+        focus = new THREE.Vector3(0, 0, 0)
+        detail.textContent = 'Click a node to inspect the flow.'
     })
     let frame = 0
     const animate = () => {
         frame = requestAnimationFrame(animate)
+        camera.position.z += (cameraGoalZ - camera.position.z) * 0.08
+        camera.position.x += (cameraGoalX - camera.position.x) * 0.08
+        camera.position.y += (cameraGoalY - camera.position.y) * 0.08
+        camera.lookAt(focus)
         group.rotation.y += 0.0018
         group.rotation.x = Math.sin(Date.now() * 0.00035) * 0.035
         meshes.forEach((mesh, index) => {
