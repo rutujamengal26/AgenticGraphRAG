@@ -20,7 +20,7 @@ GRAPH_CSS = """
     overflow: hidden;
     position: relative;
     border-radius: 18px;
-    background: radial-gradient(circle at 50% 40%, #1e6576 0%, #123b52 36%, #091b31 72%, #050e1d 100%);
+    background: radial-gradient(circle at 50% 30%, #b95f55 0%, #633747 32%, #2b2440 68%, #111827 100%);
     box-shadow: inset 0 0 0 1px rgba(160, 240, 221, .2), 0 20px 40px rgba(8, 26, 41, .16);
 }
 .scene-canvas { height: 100%; width: 100%; }
@@ -285,14 +285,14 @@ st.html("""
     }
     [data-testid="stAppViewContainer"] {
         background:
-            radial-gradient(circle at 88% 8%, rgba(255, 196, 112, .2), transparent 24rem),
-            radial-gradient(circle at 10% 22%, rgba(103, 212, 255, .13), transparent 25rem),
-            linear-gradient(135deg, #f5faf8 0%, #eef5f7 52%, #fffaf2 100%);
+            radial-gradient(circle at 88% 8%, rgba(255, 183, 77, .34), transparent 24rem),
+            radial-gradient(circle at 12% 18%, rgba(241, 128, 112, .2), transparent 26rem),
+            linear-gradient(135deg, #fff6e7 0%, #f8e5d8 50%, #eee3f3 100%);
     }
     [data-testid="stHeader"] { background: transparent; }
     [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #102f42 0%, #143d50 58%, #1c4b5a 100%);
-        border-right: 1px solid rgba(114, 242, 194, .18);
+        background: linear-gradient(180deg, #3a2031 0%, #5d3544 58%, #7f4f55 100%);
+        border-right: 1px solid rgba(255, 196, 112, .24);
     }
     [data-testid="stSidebar"] * { color: #e4fff7; }
     [data-testid="stSidebar"] [data-testid="stMetricValue"] { color: var(--mint); }
