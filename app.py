@@ -273,11 +273,70 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+st.html("""
+<style>
+    :root {
+        --ink: #122331;
+        --muted: #5f707b;
+        --marine: #102f42;
+        --mint: #72f2c2;
+        --sky: #67d4ff;
+        --amber: #ffc470;
+    }
+    [data-testid="stAppViewContainer"] {
+        background:
+            radial-gradient(circle at 88% 8%, rgba(255, 196, 112, .2), transparent 24rem),
+            radial-gradient(circle at 10% 22%, rgba(103, 212, 255, .13), transparent 25rem),
+            linear-gradient(135deg, #f5faf8 0%, #eef5f7 52%, #fffaf2 100%);
+    }
+    [data-testid="stHeader"] { background: transparent; }
+    [data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #102f42 0%, #143d50 58%, #1c4b5a 100%);
+        border-right: 1px solid rgba(114, 242, 194, .18);
+    }
+    [data-testid="stSidebar"] * { color: #e4fff7; }
+    [data-testid="stSidebar"] [data-testid="stMetricValue"] { color: var(--mint); }
+    [data-testid="stSidebar"] [data-testid="stMetric"] {
+        background: rgba(114, 242, 194, .1);
+        border-color: rgba(114, 242, 194, .18);
+    }
+    h1, h2, h3 { color: var(--ink); letter-spacing: -0.02em; }
+    [data-testid="stVerticalBlockBorderWrapper"] {
+        background: rgba(255, 255, 255, .62);
+        border-color: rgba(18, 35, 49, .12);
+        box-shadow: 0 16px 38px rgba(25, 61, 75, .07);
+        backdrop-filter: blur(12px);
+    }
+    [data-testid="stForm"] {
+        background: rgba(255, 255, 255, .52);
+        border-color: rgba(18, 35, 49, .12);
+    }
+    .stButton > button {
+        background: linear-gradient(110deg, #0f766e, #17658a);
+        border: 0;
+        border-radius: 10px;
+        box-shadow: 0 8px 18px rgba(15, 118, 110, .2);
+        color: white;
+        font-weight: 700;
+    }
+    .stButton > button:hover {
+        background: linear-gradient(110deg, #0b625d, #145575);
+        border: 0;
+        color: white;
+        transform: translateY(-1px);
+    }
+    [data-testid="stMetric"] {
+        background: rgba(255, 255, 255, .55);
+        border-color: rgba(18, 35, 49, .1);
+    }
+</style>
+""")
+
 
 with st.sidebar:
     st.markdown("## :material/hub: GraphRAG lab")
     st.caption("Round 1 investigation console")
-    st.badge("Local demo corpus", icon=":material/database:", color="blue")
+    st.badge("Local demo corpus", icon=":material/database:", color="green")
     st.markdown("### System status")
     st.success("Pipelines ready", icon=":material/check_circle:")
     st.metric("Evidence sources", "5")
